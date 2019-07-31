@@ -1,2 +1,2 @@
 # proto1
-Prototipo 1 para una aplicaciòn que implementa Multitenancy.
+Prototipo 1 para una aplicación que implementa Multitenancy.
