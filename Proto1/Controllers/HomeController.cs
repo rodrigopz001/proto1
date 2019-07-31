@@ -26,5 +26,29 @@ namespace Proto1.Controllers
 
             return View();
         }
+
+        public String Saludo()
+        {
+
+            return "<marquee><h1>Hola mundo</h1></marquee>";
+
+        }
+
+        public String Despedida()
+        {
+
+            return "<marquee><h1>Chao mundo</h1></marquee>";
+
+        }
+
+        public String Mensaje()
+        {
+
+            String mensaje = this.Request.QueryString["id"];
+            return "<marquee><h1>El mensaje es: " +mensaje+ "</h1></marquee>";
+
+        }
+
+
     }
 }
