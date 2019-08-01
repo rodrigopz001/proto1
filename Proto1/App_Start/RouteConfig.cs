@@ -36,6 +36,31 @@ namespace Proto1
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Mensaje", id = UrlParameter.Optional }
             );
+
+            routes.MapRoute(
+                name: "CrudIndex",
+                url: "{controller}/{action}/{id}",
+                defaults: new { controller = "Crud", action = "Index", id = UrlParameter.Optional }
+            );
+
+            routes.MapRoute(
+                name: "Create",
+                url: "{controller}/{action}/",
+                defaults: new { controller = "Crud", action = "Create" }
+            );
+
+            routes.MapRoute(
+                name: "Update",
+                url: "{controller}/{action}/",
+                defaults: new { controller = "Crud", action = "Update" }
+            );
+
+            routes.MapRoute(
+                name: "Delete",
+                url: "{controller}/{action}/",
+                defaults: new { controller = "Crud", action = "Delete" }
+            );
+
         }
     }
 }

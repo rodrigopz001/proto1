@@ -81,3 +81,7 @@ C:\Users\teddy.salvo\Desktop\Proyectos\Proto1\Proto1\obj\Debug\Proto1.csproj.Cor
 C:\Users\teddy.salvo\Desktop\Proyectos\Proto1\Proto1\obj\Debug\Proto1.csproj.CopyComplete
 C:\Users\teddy.salvo\Desktop\Proyectos\Proto1\Proto1\obj\Debug\Proto1.dll
 C:\Users\teddy.salvo\Desktop\Proyectos\Proto1\Proto1\obj\Debug\Proto1.pdb
+C:\Users\teddy.salvo\Desktop\Proyectos\Proto1\Proto1\bin\EntityFramework.dll
+C:\Users\teddy.salvo\Desktop\Proyectos\Proto1\Proto1\bin\EntityFramework.SqlServer.dll
+C:\Users\teddy.salvo\Desktop\Proyectos\Proto1\Proto1\bin\EntityFramework.xml
+C:\Users\teddy.salvo\Desktop\Proyectos\Proto1\Proto1\bin\EntityFramework.SqlServer.xml
