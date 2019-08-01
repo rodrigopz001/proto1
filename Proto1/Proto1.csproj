@@ -173,6 +173,8 @@
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Crud\Index.cshtml" />
+    <Content Include="Views\Crud\Create.cshtml" />
+    <Content Include="Views\Crud\Update.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
