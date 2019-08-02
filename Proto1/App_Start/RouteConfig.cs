@@ -51,14 +51,14 @@ namespace Proto1
 
             routes.MapRoute(
                 name: "Update",
-                url: "{controller}/{action}/",
-                defaults: new { controller = "Crud", action = "Update" }
+                url: "{controller}/{action}/{id}",
+                defaults: new { controller = "Crud", action = "Update", id = UrlParameter.Optional }
             );
 
             routes.MapRoute(
                 name: "Delete",
-                url: "{controller}/{action}/",
-                defaults: new { controller = "Crud", action = "Delete" }
+                url: "{controller}/{action}/{id}",
+                defaults: new { controller = "Crud", action = "Delete", id = UrlParameter.Optional }
             );
 
         }
