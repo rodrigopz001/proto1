@@ -10,21 +10,58 @@ namespace Proto1.Controllers
     {
         public ActionResult Index()
         {
-            return View();
+
+            if (System.Web.HttpContext.Current.Session["user_name"] == null || System.Web.HttpContext.Current.Session["db_path"] == null)
+            {
+
+                return RedirectToAction("Index", "Login");
+
+            }
+            else
+            {
+
+                return View();
+
+            }
+
         }
 
         public ActionResult About()
         {
-            ViewBag.Message = "Your application description page.";
 
-            return View();
+            if (System.Web.HttpContext.Current.Session["user_name"] == null || System.Web.HttpContext.Current.Session["db_path"] == null)
+            {
+
+                return RedirectToAction("Index", "Login");
+
+            }
+            else
+            {
+
+                ViewBag.Message = "En construcción.";
+                return View();
+
+            }
+
         }
 
         public ActionResult Contact()
         {
-            ViewBag.Message = "Your contact page.";
 
-            return View();
+            if (System.Web.HttpContext.Current.Session["user_name"] == null || System.Web.HttpContext.Current.Session["db_path"] == null)
+            {
+
+                return RedirectToAction("Index", "Login");
+
+            }
+            else
+            {
+
+                ViewBag.Message = "Datos de contacto.";
+                return View();
+
+            }
+                
         }
 
     }

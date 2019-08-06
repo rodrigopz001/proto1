@@ -22,12 +22,15 @@ namespace Proto1.Controllers
         }
 
         [HttpPost]
-        public String Index(User user)
+        public ActionResult Index(User user)
         {
 
             DataTable dt = new DataTable();
             SqlCommand cmd;
             SqlDataAdapter da;
+
+            Console.WriteLine("Usuario: " + user.username);
+            Console.WriteLine("DB Path: " + user.db_path);
 
             string strConString = @"Data Source=.\SQLEXPRESS;Initial Catalog=catalogo;Integrated Security=True";
 
@@ -46,7 +49,7 @@ namespace Proto1.Controllers
                 if(dt.Rows.Count == 0)
                 {
 
-                    return "El cliente no existe o la contraseña es errónea.";
+                    return RedirectToAction("Index", "Login");
 
                 }
                 else
@@ -58,58 +61,28 @@ namespace Proto1.Controllers
                     string strConString2 = @"Data Source=.\SQLEXPRESS;Initial Catalog=" +db_path+";Integrated Security=True";
                     Debug.WriteLine(db_path);
                     Debug.WriteLine(strConString2);
-                    
-                    using (SqlConnection con2 = new SqlConnection(strConString2))
-                    {
 
-                        dt = new DataTable();
+                    System.Web.HttpContext.Current.Session["user_name"] = name;
+                    System.Web.HttpContext.Current.Session["db_path"] = db_path;
 
-                        con2.Open();
-                        cmd = new SqlCommand("select * from Entity");
+                    Debug.WriteLine(System.Web.HttpContext.Current.Session["user_name"]);
+                    Debug.WriteLine(System.Web.HttpContext.Current.Session["db_path"]);
 
-                        da = new SqlDataAdapter(cmd);
-                        da.Fill(dt);
-
-                        String html = "";
-                        html += "<p>Bienvenido " + name + "<p>";
-                        html += "<p>Tus entidades son:</p>";
-                        html += "<br>";
-                        html += "<table>";
-                        html += "<tr>";
-                        html += "<th>ID</th>";
-                        html += "<th>Nombre</th>";
-                        html += "<th>Descripción</th>";
-                        html += "<th>Fecha creación</th>";
-                        html += "</tr>";
-
-                        foreach (DataRow row in dt.Rows)
-                        {
-
-                            int e_id = Int32.Parse(row["id"].ToString());
-                            String e_name = row["name"].ToString();
-                            String e_content = row["content"].ToString();
-                            DateTime e_creation_date = Convert.ToDateTime(row["creation_date"].ToString());
-
-                            html += "<tr>";
-                            html += "<td>" + e_id + "</td>";
-                            html += "<td>" + e_name + "</td>";
-                            html += "<td>" + e_content + "</td>";
-                            html += "<td>" + e_creation_date + "</td>";
-                            html += "</tr>";
-
-                        }
-
-                        html += "</table>";
-
-                        return html;
-
-                    }
+                    return RedirectToAction("Index", "Crud");
 
                 }
 
             }
 
+        }
 
+        public ActionResult Cerrar()
+        {
+
+            Debug.WriteLine("Cerrando sesión");
+            System.Web.HttpContext.Current.Session["user_name"] = null;
+            System.Web.HttpContext.Current.Session["db_path"] = null;
+            return RedirectToAction("Index", "Login");
 
         }
     }
