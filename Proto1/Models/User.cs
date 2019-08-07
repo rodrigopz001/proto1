@@ -14,9 +14,11 @@ namespace Proto1.Models
 
         public String password { get; set; }
 
-        public bool is_Active { get; set; } 
+        public int is_active { get; set; } 
 
         public String db_path { get; set; }
+
+        public int user_type { get; set; }
 
 
     }

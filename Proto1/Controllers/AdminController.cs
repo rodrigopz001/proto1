@@ -1,0 +1,384 @@
+﻿using Proto1.Models;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+
+namespace Proto1.Controllers
+{
+    public class AdminController : Controller
+    {
+
+        // GET: Admin
+        public ActionResult Index()
+        {
+            if(System.Web.HttpContext.Current.Session["is_logged"] == null)
+            {
+
+                return RedirectToAction("Index", "Login");
+
+            }
+            else
+            {
+
+                if (Int32.Parse(System.Web.HttpContext.Current.Session["user_type"].ToString()) == 0)
+                {
+
+                    DataTable dt = new DataTable();
+                    string strConString = @"Data Source=.\SQLEXPRESS;Initial Catalog=catalogo;Integrated Security=True";
+
+                    using (SqlConnection con = new SqlConnection(strConString))
+                    {
+
+                        con.Open();
+                        SqlCommand cmd = new SqlCommand("Select * from Credencial where user_type <> 0", con);
+                        SqlDataAdapter da = new SqlDataAdapter(cmd);
+                        da.Fill(dt);
+
+                    }
+
+                    var userList = new List<User>();
+
+                    foreach (DataRow row in dt.Rows)
+                    {
+
+                        int id = Int32.Parse(row["id"].ToString());
+                        String name = row["username"].ToString();
+                        String content = row["password"].ToString();
+                        int is_active = Int32.Parse(row["is_active"].ToString());
+                        String db_path = row["db_path"].ToString();
+
+                        User user = new User();
+                        user.id = id;
+                        user.username = name;
+                        user.password = content;
+                        user.is_active = is_active;
+                        user.db_path = db_path;
+
+                        userList.Add(user);
+
+                    }
+
+                    return View(userList);
+
+                }
+                else
+                {
+
+                    return Content("No tiene permiso para ingresar aquí");
+
+                }
+
+            }
+
+        }
+
+        [HttpGet]
+        public ActionResult Details(String id)
+        {
+
+            if (System.Web.HttpContext.Current.Session["is_logged"] == null)
+            {
+
+                return RedirectToAction("Index", "Login");
+
+            }
+            else
+            {
+
+                if (Int32.Parse(System.Web.HttpContext.Current.Session["user_type"].ToString()) == 0)
+                {
+
+                    User user = GetUser(id);
+                    return View(user);
+
+
+                }
+                else
+                {
+
+                    return Content("No tiene permiso para ingresar aquí");
+
+                }
+
+            }
+
+        }
+
+        [HttpGet]
+        public ActionResult Create()
+        {
+
+            if(System.Web.HttpContext.Current.Session["is_logged"] == null)
+            {
+
+                return RedirectToAction("Index", "Login");
+
+            }
+            else
+            {
+
+                if (Int32.Parse(System.Web.HttpContext.Current.Session["user_type"].ToString()) == 0)
+                {
+
+                    return View();
+
+                }
+                else
+                {
+
+                    return Content("No tiene permiso para ingresar aquí.");
+
+                }
+
+            }
+
+        }
+
+        [HttpPost]
+        public ActionResult Create(User user)
+        {
+
+            if (System.Web.HttpContext.Current.Session["is_logged"] == null)
+            {
+
+                return RedirectToAction("Index", "Login");
+
+            }
+            else
+            {
+
+                if (Int32.Parse(System.Web.HttpContext.Current.Session["user_type"].ToString()) == 0)
+                {
+
+                    string strConString = @"Data Source=.\SQLEXPRESS;Initial Catalog=catalogo;Integrated Security=True";
+
+                    using (SqlConnection con = new SqlConnection(strConString))
+                    {
+
+                        con.Open();
+
+                        String query = "insert into Credencial(username,password,is_active,db_path,user_type) values(@username, @password, @is_active, @db_path, @user_type)";
+                        SqlCommand cmd = new SqlCommand(query, con);
+
+                        cmd.Parameters.AddWithValue("@username", user.username);
+                        cmd.Parameters.AddWithValue("@password", user.password);
+                        cmd.Parameters.AddWithValue("@is_active", user.is_active);
+                        cmd.Parameters.AddWithValue("@db_path", user.db_path);
+                        cmd.Parameters.AddWithValue("@user_type", user.user_type);
+                        cmd.ExecuteNonQuery();
+
+                    }
+
+                    return RedirectToAction("Index", "Admin");
+
+                }
+                else
+                {
+
+                    return Content("No tiene permiso para ingresar aquí.");
+
+                }
+
+            }
+
+        }
+
+        [HttpGet]
+        public ActionResult Update(String id)
+        {
+
+            if (System.Web.HttpContext.Current.Session["is_logged"] == null)
+            {
+
+                return RedirectToAction("Index", "Login");
+
+            }
+            else
+            {
+
+                if (Int32.Parse(System.Web.HttpContext.Current.Session["user_type"].ToString()) == 0)
+                {
+
+                    User user = GetUser(id);
+                    return View(user);
+
+                }
+                else
+                {
+
+                    return Content("No tiene permiso para ingresar aquí.");
+
+                }
+
+            }
+
+        }
+
+        [HttpPost]
+        public ActionResult Update(User user)
+        {
+
+            if (System.Web.HttpContext.Current.Session["is_logged"] == null)
+            {
+
+                return RedirectToAction("Index", "Login");
+
+            }
+            else
+            {
+
+                if (Int32.Parse(System.Web.HttpContext.Current.Session["user_type"].ToString()) == 0)
+                {
+
+                    string strConString = @"Data Source=.\SQLEXPRESS;Initial Catalog=catalogo;Integrated Security=True";
+
+                    using (SqlConnection con = new SqlConnection(strConString))
+                    {
+
+                        con.Open();
+
+                        String query = "update Credencial set username = @username, password = @password, is_active = @is_active, db_path = @db_path, user_type = @user_type where id = @id";
+                        SqlCommand cmd = new SqlCommand(query, con);
+
+                        cmd.Parameters.AddWithValue("@id", user.id);
+                        cmd.Parameters.AddWithValue("@username", user.username);
+                        cmd.Parameters.AddWithValue("@password", user.password);
+                        cmd.Parameters.AddWithValue("@is_active", user.is_active);
+                        cmd.Parameters.AddWithValue("@db_path", user.db_path);
+                        cmd.Parameters.AddWithValue("@user_type", user.user_type);
+                        cmd.ExecuteNonQuery();
+
+                    }
+
+                    return RedirectToAction("Index", "Admin");
+
+                }
+                else
+                {
+
+                    return Content("No tiene permiso para ingresar aquí.");
+
+                }
+
+            }
+
+        }
+
+        [HttpGet]
+        public ActionResult Delete(String id)
+        {
+
+            if (System.Web.HttpContext.Current.Session["is_logged"] == null)
+            {
+
+                return RedirectToAction("Index", "Login");
+
+            }
+            else
+            {
+
+                if (Int32.Parse(System.Web.HttpContext.Current.Session["user_type"].ToString()) == 0)
+                {
+
+                    User user = GetUser(id);
+                    return View(user);
+
+                }
+                else
+                {
+
+                    return Content("No tiene permiso para ingresar aquí.");
+
+                }
+
+            }
+
+        }
+
+        [HttpPost]
+        public ActionResult Delete(User user)
+        {
+
+            if (System.Web.HttpContext.Current.Session["is_logged"] == null)
+            {
+
+                return RedirectToAction("Index", "Login");
+
+            }
+            else
+            {
+
+                if (Int32.Parse(System.Web.HttpContext.Current.Session["user_type"].ToString()) == 0)
+                {
+
+                    string strConString = @"Data Source=.\SQLEXPRESS;Initial Catalog=catalogo;Integrated Security=True";
+
+                    using (SqlConnection con = new SqlConnection(strConString))
+                    {
+
+                        con.Open();
+
+                        String query = "delete from Credencial where id = @id";
+                        SqlCommand cmd = new SqlCommand(query, con);
+
+                        cmd.Parameters.AddWithValue("@id", user.id);
+                        cmd.ExecuteNonQuery();
+
+                    }
+
+                    return RedirectToAction("Index", "Admin");
+
+                }
+                else
+                {
+
+                    return Content("No tiene permiso para ingresar aquí.");
+
+                }
+
+            }
+
+        }
+
+        private User GetUser(String id)
+        {
+
+            DataTable dt = new DataTable();
+            string strConString = @"Data Source=.\SQLEXPRESS;Initial Catalog=catalogo;Integrated Security=True";
+
+
+            using (SqlConnection con = new SqlConnection(strConString))
+            {
+
+                con.Open();
+                SqlCommand cmd = new SqlCommand("select * from Credencial where convert(varchar,id)=" + id, con);
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                da.Fill(dt);
+
+            }
+
+            String username = dt.Rows[0]["username"].ToString();
+            String password = dt.Rows[0]["password"].ToString();
+            int is_active = Int32.Parse(dt.Rows[0]["is_active"].ToString());
+            String db_path = dt.Rows[0]["db_path"].ToString();
+            int user_type = Int32.Parse(dt.Rows[0]["user_type"].ToString());
+
+
+            User user = new User();
+            user.id = Int32.Parse(id);
+            user.username = username;
+            user.password = password;
+            user.is_active = is_active;
+            user.db_path = db_path;
+            user.user_type = user_type;
+
+            return user;
+
+        }
+
+    }
+}
