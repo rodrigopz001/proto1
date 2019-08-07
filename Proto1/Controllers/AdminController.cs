@@ -50,6 +50,7 @@ namespace Proto1.Controllers
                         String content = row["password"].ToString();
                         int is_active = Int32.Parse(row["is_active"].ToString());
                         String db_path = row["db_path"].ToString();
+                        int user_type = Int32.Parse(row["user_type"].ToString());
 
                         User user = new User();
                         user.id = id;
@@ -57,6 +58,7 @@ namespace Proto1.Controllers
                         user.password = content;
                         user.is_active = is_active;
                         user.db_path = db_path;
+                        user.user_type = user_type;
 
                         userList.Add(user);
 
@@ -168,7 +170,33 @@ namespace Proto1.Controllers
                         cmd.Parameters.AddWithValue("@password", user.password);
                         cmd.Parameters.AddWithValue("@is_active", user.is_active);
                         cmd.Parameters.AddWithValue("@db_path", user.db_path);
-                        cmd.Parameters.AddWithValue("@user_type", user.user_type);
+                        cmd.Parameters.AddWithValue("@user_type", 1);
+                        cmd.ExecuteNonQuery();
+
+                    }
+
+                    strConString = @"Data Source=.\SQLEXPRESS;Initial Catalog=master;Integrated Security=True";
+
+                    using (SqlConnection con2 = new SqlConnection(strConString))
+                    {
+
+                        con2.Open();
+
+                        String query = "create database " +user.db_path;
+                        SqlCommand cmd = new SqlCommand(query, con2);
+                        cmd.ExecuteNonQuery();
+
+                    }
+
+                    strConString = @"Data Source=.\SQLEXPRESS;Initial Catalog=" + user.db_path + ";Integrated Security=True";
+
+                    using (SqlConnection con3 = new SqlConnection(strConString))
+                    {
+
+                        con3.Open();
+
+                        String query = "CREATE TABLE Entity(name text, content text, creation_date datetime, id int not null identity (1,1))";
+                        SqlCommand cmd = new SqlCommand(query, con3);
                         cmd.ExecuteNonQuery();
 
                     }

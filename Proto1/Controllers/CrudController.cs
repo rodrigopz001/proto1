@@ -8,8 +8,6 @@ using System.Data.SqlClient;
 using Proto1.Models;
 using System.Diagnostics;
 
-//Tutorial en: https://www.c-sharpcorner.com/UploadFile/francissvk/crud-operations-in-Asp-Net-mvc-using-ado-net/
-
 namespace Proto1.Controllers
 {
     public class CrudController : Controller

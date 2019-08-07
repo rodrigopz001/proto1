@@ -7,21 +7,24 @@
 <h2>Index</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Nuevo", "Create")
 </p>
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.username)
+            Nombre
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.password)
+            Contraseña
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.is_active)
+            Estado
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.db_path)
+            Tipo de usuario
+        </th>
+        <th>
+            Base de Datos
         </th>
         <th></th>
     </tr>
@@ -35,15 +38,34 @@
             @Html.DisplayFor(modelItem => item.password)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.is_active)
+            @if (item.is_active == 0)
+            {
+                @:Deshabilitado
+            }
+            else
+            {
+                @:Habilitado
+            }
+        </td>
+        <td>
+            @if (item.user_type == 0){
+               
+                @:Administrador
+            }
+            else
+            {
+
+                @:Cliente
+
+            }
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.db_path)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Update", new { id=item.id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.id })
+            @Html.ActionLink("Editar", "Update", new { id=item.id }) |
+            @Html.ActionLink("Detalles", "Details", new { id=item.id }) |
+            @Html.ActionLink("Eliminar", "Delete", new { id=item.id })
         </td>
     </tr>
 }

@@ -1,10 +1,10 @@
 ﻿@model Proto1.Models.User
 
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "Nuevo usuario";
 }
 
-<h2>Create</h2>
+<h2>Crear usuario</h2>
 
 
 @using (Html.BeginForm()) 
@@ -12,11 +12,11 @@
     @Html.AntiForgeryToken()
     
 <div class="form-horizontal">
-    <h4>User</h4>
+    <h4>Complete el siguiente formulario</h4>
     <hr />
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     <div class="form-group">
-        @Html.LabelFor(model => model.username, htmlAttributes: new { @class = "control-label col-md-2" })
+        @Html.LabelFor(model => model.username, "Nombre", htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
             @Html.EditorFor(model => model.username, new { htmlAttributes = new { @class = "form-control" } })
             @Html.ValidationMessageFor(model => model.username, "", new { @class = "text-danger" })
@@ -24,35 +24,38 @@
     </div>
 
     <div class="form-group">
-        @Html.LabelFor(model => model.password, htmlAttributes: new { @class = "control-label col-md-2" })
+        @Html.LabelFor(model => model.password, "Contraseña", htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.EditorFor(model => model.password, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.PasswordFor(model => model.password, new { htmlAttributes = new { @class = "form-control" } })
             @Html.ValidationMessageFor(model => model.password, "", new { @class = "text-danger" })
         </div>
     </div>
 
     <div class="form-group">
-        @Html.LabelFor(model => model.is_active, htmlAttributes: new { @class = "control-label col-md-2" })
+        @Html.LabelFor(model => model.is_active, "Estado", htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
             <div class="checkbox">
-                @Html.EditorFor(model => model.is_active)
-                @Html.ValidationMessageFor(model => model.is_active, "", new { @class = "text-danger" })
+                @{
+                    List<SelectListItem> listItems = new List<SelectListItem>();
+                    listItems.Add(new SelectListItem
+                    {
+                        Text = "Inhabilitado",
+                        Value = "0",
+                    });
+                    listItems.Add(new SelectListItem
+                    {
+                        Text = "Habilitado",
+                        Value = "1",
+                        Selected = true
+                    });
+                }
+                @Html.DropDownListFor(model => model.is_active, listItems)
             </div>
         </div>
     </div>
 
     <div class="form-group">
-        @Html.LabelFor(model => model.user_type, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            <div class="checkbox">
-                @Html.EditorFor(model => model.user_type)
-                @Html.ValidationMessageFor(model => model.user_type, "", new { @class = "text-danger" })
-            </div>
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.db_path, htmlAttributes: new { @class = "control-label col-md-2" })
+        @Html.LabelFor(model => model.db_path, "Base de datos", htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
             @Html.EditorFor(model => model.db_path, new { htmlAttributes = new { @class = "form-control" } })
             @Html.ValidationMessageFor(model => model.db_path, "", new { @class = "text-danger" })
@@ -61,14 +64,14 @@
 
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Create" class="btn btn-default" />
+            <input type="submit" value="Registrar" class="btn btn-default" />
         </div>
     </div>
 </div>
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Regresar", "Index")
 </div>
 
 @section Scripts {
