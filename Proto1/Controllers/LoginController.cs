@@ -69,12 +69,22 @@ namespace Proto1.Controllers
                         return RedirectToAction("Index", "Admin");
 
                     }
-                    else
+                    
+                    if (user_type == 1)
+                    {
+
+                        return RedirectToAction("Index", "Subadmin");
+
+                    }
+
+                    if(user_type == 2)
                     {
 
                         return RedirectToAction("Index", "Crud");
 
-                    }     
+                    }
+
+                    return null;
 
                 }
 

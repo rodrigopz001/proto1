@@ -132,6 +132,7 @@
     <Compile Include="Controllers\CrudController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\SubadminController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -229,6 +230,11 @@
     <Content Include="Views\Admin\Details.cshtml" />
     <Content Include="Views\Admin\Update.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
+    <Content Include="Views\Subadmin\Create.cshtml" />
+    <Content Include="Views\Subadmin\Delete.cshtml" />
+    <Content Include="Views\Subadmin\Details.cshtml" />
+    <Content Include="Views\Subadmin\Update.cshtml" />
+    <Content Include="Views\Subadmin\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -21,10 +21,35 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Entidades", "Index", "Crud")</li>
-                    <li>@Html.ActionLink("Acerca de", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contacto", "Contact", "Home")</li>
-                    <li>@Html.ActionLink("Cerrar sesión","Cerrar","Login")</li>
+
+                    @if (System.Web.HttpContext.Current.Session["user_type"] != null)
+                    {
+                        if (System.Web.HttpContext.Current.Session["user_type"].ToString() == "0")
+                        {
+                            <li>@Html.ActionLink("Usuarios", "Index", "Admin")</li>
+                            <li>@Html.ActionLink("Acerca de", "About", "Home")</li>
+                            <li>@Html.ActionLink("Contacto", "Contact", "Home")</li>
+                            <li>@Html.ActionLink("Cerrar sesión", "Cerrar", "Login")</li>
+                        }
+
+                        if (System.Web.HttpContext.Current.Session["user_type"].ToString() == "1")
+                        {
+                            <li>@Html.ActionLink("Usuarios", "Index", "Subadmin")</li>
+                            <li>@Html.ActionLink("Entidades", "Index", "Crud")</li>
+                            <li>@Html.ActionLink("Acerca de", "About", "Home")</li>
+                            <li>@Html.ActionLink("Contacto", "Contact", "Home")</li>
+                            <li>@Html.ActionLink("Cerrar sesión", "Cerrar", "Login")</li>
+                        }
+
+                        if (System.Web.HttpContext.Current.Session["user_type"].ToString() == "2")
+                        {
+                            <li>@Html.ActionLink("Entidades", "Index", "Crud")</li>
+                            <li>@Html.ActionLink("Acerca de", "About", "Home")</li>
+                            <li>@Html.ActionLink("Contacto", "Contact", "Home")</li>
+                            <li>@Html.ActionLink("Cerrar sesión", "Cerrar", "Login")</li>
+                        }
+
+                    }
                 </ul>
             </div>
         </div>
