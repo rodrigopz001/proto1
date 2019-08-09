@@ -160,6 +160,7 @@ namespace Proto1.Controllers
                     int user_type = user.user_type;
 
                     string strConString = @"Data Source=.\SQLEXPRESS;Initial Catalog=catalogo;Integrated Security=True";
+                    int last_catalogId;
 
                     using (SqlConnection con = new SqlConnection(strConString))
                     {
@@ -176,9 +177,18 @@ namespace Proto1.Controllers
                         cmd.Parameters.AddWithValue("@user_type", user_type);
                         cmd.ExecuteNonQuery();
 
+                        DataTable dt = new DataTable();
+                        query = "select top 1 * from Credencial order by id desc";
+                        cmd = new SqlCommand(query, con);
+                        SqlDataAdapter da = new SqlDataAdapter(cmd);
+                        da.Fill(dt);
+
+                        last_catalogId = Int32.Parse(dt.Rows[0]["id"].ToString());
+
+
                     }
 
-                    if(user_type == 0)
+                    if(user_type == 1)
                     {
 
                         strConString = @"Data Source=.\SQLEXPRESS;Initial Catalog=master;Integrated Security=True";
@@ -209,6 +219,15 @@ namespace Proto1.Controllers
                             cmd = new SqlCommand(query, con3);
                             cmd.ExecuteNonQuery();
 
+                            query = "insert into Credencial(username,password,is_active,db_path,user_type) values(@username, @password, @is_active, @db_path, @user_type)";
+                            cmd = new SqlCommand(query, con3);
+                            cmd.Parameters.AddWithValue("@username", user.username);
+                            cmd.Parameters.AddWithValue("@password", user.password);
+                            cmd.Parameters.AddWithValue("@is_active", user.is_active);
+                            cmd.Parameters.AddWithValue("@db_path", user.db_path);
+                            cmd.Parameters.AddWithValue("@user_type", user_type);
+                            cmd.ExecuteNonQuery();
+
                         }
 
                     }
@@ -216,14 +235,14 @@ namespace Proto1.Controllers
                     if(user_type == 2)
                     {
 
-                        strConString = @"Data Source=.\SQLEXPRESS;Initial Catalog=" + user.db_path + ";Integrated Security=True";
+                        strConString = @"Data Source=.\SQLEXPRESS;Initial Catalog="+user.db_path+";Integrated Security=True";
 
                         using (SqlConnection con = new SqlConnection(strConString))
                         {
 
                             con.Open();
 
-                            String query = "insert into Credencial(username,password,is_active,db_path,user_type) values(@username, @password, @is_active, @db_path, @user_type)";
+                            String query = "insert into Credencial(username,password,is_active,db_path,user_type,id_catalogo) values(@username, @password, @is_active, @db_path, @user_type, @id_catalogo)";
                             SqlCommand cmd = new SqlCommand(query, con);
 
                             cmd.Parameters.AddWithValue("@username", user.username);
@@ -231,6 +250,7 @@ namespace Proto1.Controllers
                             cmd.Parameters.AddWithValue("@is_active", user.is_active);
                             cmd.Parameters.AddWithValue("@db_path", user.db_path);
                             cmd.Parameters.AddWithValue("@user_type", user_type);
+                            cmd.Parameters.AddWithValue("@id_catalogo", last_catalogId);
                             cmd.ExecuteNonQuery();
 
                         }
@@ -318,6 +338,39 @@ namespace Proto1.Controllers
 
                     }
 
+                    int user_type = user.user_type;
+
+                    if(user_type == 1 || user_type == 2)
+                    {
+
+                        strConString = @"Data Source=.\SQLEXPRESS;Initial Catalog=" +user.db_path+";Integrated Security=True";
+
+                        using (SqlConnection con = new SqlConnection(strConString))
+                        {
+
+                            con.Open();
+
+                            String query = "select id_catalogo from Credencial where id = @id";
+                            SqlCommand cmd = new SqlCommand(query, con);
+                            SqlDataAdapter da = new SqlDataAdapter(cmd);
+                            DataTable dt = new DataTable();
+                            da.Fill(dt);
+
+                            query = "update Credencial set username = @username, password = @password, is_active = @is_active, db_path = @db_path, user_type = @user_type where id = @id";
+                            cmd = new SqlCommand(query, con);
+
+                            cmd.Parameters.AddWithValue("@id", user.id);
+                            cmd.Parameters.AddWithValue("@username", user.username);
+                            cmd.Parameters.AddWithValue("@password", user.password);
+                            cmd.Parameters.AddWithValue("@is_active", user.is_active);
+                            cmd.Parameters.AddWithValue("@db_path", user.db_path);
+                            cmd.Parameters.AddWithValue("@user_type", user.user_type);
+                            cmd.ExecuteNonQuery();
+
+                        }
+
+                    }
+
                     return RedirectToAction("Index", "Admin");
 
                 }
@@ -391,6 +444,28 @@ namespace Proto1.Controllers
 
                         cmd.Parameters.AddWithValue("@id", user.id);
                         cmd.ExecuteNonQuery();
+
+                    }
+
+                    int user_type = user.user_type;
+
+                    if(user_type == 1 || user_type == 2)
+                    {
+
+                        strConString = @"Data Source=.\SQLEXPRESS;Initial Catalog="+user.db_path+";Integrated Security=True";
+
+                        using (SqlConnection con = new SqlConnection(strConString))
+                        {
+
+                            con.Open();
+
+                            String query = "delete from Credencial where id = @id";
+                            SqlCommand cmd = new SqlCommand(query, con);
+
+                            cmd.Parameters.AddWithValue("@id", user.id);
+                            cmd.ExecuteNonQuery();
+
+                        }
 
                     }
 
