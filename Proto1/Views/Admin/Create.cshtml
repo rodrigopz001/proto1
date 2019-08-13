@@ -1,13 +1,13 @@
 ﻿@model Proto1.Models.User
 
 @{
-    ViewBag.Title = "Nuevo usuario";
+    ViewBag.Title = "Nuevo administrador";
 }
 
 <h2>Crear usuario</h2>
 
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "myForm" })) 
 {
     @Html.AntiForgeryToken()
     
@@ -16,7 +16,7 @@
     <hr />
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     <div class="form-group">
-        @Html.LabelFor(model => model.username, "Nombre", htmlAttributes: new { @class = "control-label col-md-2" })
+        @Html.LabelFor(model => model.username, "Nombre usuario", htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
             @Html.EditorFor(model => model.username, new { htmlAttributes = new { @class = "form-control" } })
             @Html.ValidationMessageFor(model => model.username, "", new { @class = "text-danger" })
@@ -55,24 +55,8 @@
     </div>
 
     <div class="form-group">
-        @Html.LabelFor(model => model.user_type, "Tipo de usuario", htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.user_type, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.user_type, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.db_path, "Base de datos", htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.db_path, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.db_path, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Registrar" class="btn btn-default" />
+            <input type="button" value="Registrar" class="btn btn-default" onclick="return validarUsuario()" />
         </div>
     </div>
 </div>
@@ -82,6 +66,45 @@
     @Html.ActionLink("Regresar", "Index")
 </div>
 
+<script>
+
+    function validarUsuario() {
+
+        var name = document.getElementById("username").value;
+
+        $.ajax({
+
+            url: "/Admin/UserExists",
+            type: "GET",
+            data: { "name": name },
+
+            success: function (response) {
+
+                if (response.success) {
+
+                    alert("Administrador creado exitosamente");
+                    document.getElementById("myForm").submit();
+
+                } else {
+
+                    alert(response.responseText);
+
+                }
+
+            },
+
+            error: function (response) {
+
+                alert("Error.");
+
+            }
+        });
+
+    }
+
+</script>
+
 @section Scripts {
+
     @Scripts.Render("~/bundles/jqueryval")
 }

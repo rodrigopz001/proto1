@@ -58,7 +58,7 @@ namespace Proto1.Controllers
                         user.username = username;
                         user.password = password;
                         user.is_active = is_active;
-                        user.db_path = db_path;
+                        user.id_ruta = 1;
                         user.user_type = user_type;
 
                         userList.Add(user);
@@ -164,13 +164,13 @@ namespace Proto1.Controllers
 
                         con.Open();
 
-                        String query = "insert into Credencial(username,password,is_active,db_path,user_type) values(@username, @password, @is_active, @db_path, @user_type)";
+                        String query = "insert into Credencial(username,password,is_active,id_ruta,user_type) values(@username, @password, @is_active, @id_ruta, @user_type)";
                         SqlCommand cmd = new SqlCommand(query, con);
 
                         cmd.Parameters.AddWithValue("@username", user.username);
                         cmd.Parameters.AddWithValue("@password", user.password);
                         cmd.Parameters.AddWithValue("@is_active", user.is_active);
-                        cmd.Parameters.AddWithValue("@db_path", user.db_path);
+                        cmd.Parameters.AddWithValue("@id_ruta", user.id_ruta);
                         cmd.Parameters.AddWithValue("@user_type", 2);
                         cmd.ExecuteNonQuery();
 
@@ -183,13 +183,13 @@ namespace Proto1.Controllers
 
                         con2.Open();
 
-                        String query = "insert into Credencial(username,password,is_active,db_path,user_type) values(@username, @password, @is_active, @db_path, @user_type)";
+                        String query = "insert into Credencial(username,password,is_active,id_ruta,user_type) values(@username, @password, @is_active, @id_ruta, @user_type)";
                         SqlCommand cmd = new SqlCommand(query, con2);
 
                         cmd.Parameters.AddWithValue("@username", user.username);
                         cmd.Parameters.AddWithValue("@password", user.password);
                         cmd.Parameters.AddWithValue("@is_active", user.is_active);
-                        cmd.Parameters.AddWithValue("@db_path", user.db_path);
+                        cmd.Parameters.AddWithValue("@id_ruta", 1);
                         cmd.Parameters.AddWithValue("@user_type", 2);
                         cmd.ExecuteNonQuery();
 
@@ -264,14 +264,14 @@ namespace Proto1.Controllers
 
                         con.Open();
 
-                        String query = "update Credencial set username = @username, password = @password, is_active = @is_active, db_path = @db_path, user_type = @user_type where id = @id";
+                        String query = "update Credencial set username = @username, password = @password, is_active = @is_active, id_ruta = @id_ruta, user_type = @user_type where id = @id";
                         SqlCommand cmd = new SqlCommand(query, con);
 
                         cmd.Parameters.AddWithValue("@id", user.id);
                         cmd.Parameters.AddWithValue("@username", user.username);
                         cmd.Parameters.AddWithValue("@password", user.password);
                         cmd.Parameters.AddWithValue("@is_active", user.is_active);
-                        cmd.Parameters.AddWithValue("@db_path", user.db_path);
+                        cmd.Parameters.AddWithValue("@id_ruta", user.id_ruta);
                         cmd.Parameters.AddWithValue("@user_type", user.user_type);
                         cmd.ExecuteNonQuery();
 
@@ -291,7 +291,7 @@ namespace Proto1.Controllers
                         cmd.Parameters.AddWithValue("@username", user.username);
                         cmd.Parameters.AddWithValue("@password", user.password);
                         cmd.Parameters.AddWithValue("@is_active", user.is_active);
-                        cmd.Parameters.AddWithValue("@db_path", user.db_path);
+                        cmd.Parameters.AddWithValue("@id_ruta", user.id_ruta);
                         cmd.Parameters.AddWithValue("@user_type", user.user_type);
                         cmd.ExecuteNonQuery();
 
@@ -433,7 +433,7 @@ namespace Proto1.Controllers
             user.username = username;
             user.password = password;
             user.is_active = is_active;
-            user.db_path = db_path;
+            user.id_ruta = Int32.Parse(db_path);
             user.user_type = user_type;
 
             return user;

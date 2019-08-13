@@ -11,7 +11,7 @@ namespace Proto1.Controllers
         public ActionResult Index()
         {
 
-            if (System.Web.HttpContext.Current.Session["user_name"] == null || System.Web.HttpContext.Current.Session["db_path"] == null)
+            if (System.Web.HttpContext.Current.Session["is_logged"] == null)
             {
 
                 return RedirectToAction("Index", "Login");
@@ -29,7 +29,7 @@ namespace Proto1.Controllers
         public ActionResult About()
         {
 
-            if (System.Web.HttpContext.Current.Session["user_name"] == null || System.Web.HttpContext.Current.Session["db_path"] == null)
+            if (System.Web.HttpContext.Current.Session["is_logged"] == null)
             {
 
                 return RedirectToAction("Index", "Login");
@@ -48,7 +48,7 @@ namespace Proto1.Controllers
         public ActionResult Contact()
         {
 
-            if (System.Web.HttpContext.Current.Session["user_name"] == null || System.Web.HttpContext.Current.Session["db_path"] == null)
+            if (System.Web.HttpContext.Current.Session["is_logged"] == null)
             {
 
                 return RedirectToAction("Index", "Login");

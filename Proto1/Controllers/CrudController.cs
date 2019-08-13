@@ -127,7 +127,7 @@ namespace Proto1.Controllers
 
                 int user_type = Int32.Parse(System.Web.HttpContext.Current.Session["user_type"].ToString());
 
-                if (user_type == 1 || user_type == 2)
+                if (user_type == 0 || user_type == 1 || user_type == 2)
                 {
 
                     String user_name = System.Web.HttpContext.Current.Session["user_name"].ToString();

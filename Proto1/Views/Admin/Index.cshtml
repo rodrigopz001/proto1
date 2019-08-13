@@ -1,4 +1,6 @@
 ﻿@model IEnumerable<Proto1.Models.User>
+@using System.Data
+@using System.Data.SqlClient 
 
 @{
     ViewBag.Title = "Index";
@@ -48,8 +50,8 @@
             }
         </td>
         <td>
-            @if (item.user_type == 0){
-               
+            @if (item.user_type < 2) {
+
                 @:Administrador
             }
             else
@@ -60,7 +62,22 @@
             }
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.db_path)
+            @{
+
+                DataTable dt = new DataTable();
+                string strConString = @"Data Source=.\SQLEXPRESS;Initial Catalog=catalogo;Integrated Security=True";
+                SqlConnection con = new SqlConnection(strConString);
+                con.Open();
+                SqlCommand cmd = new SqlCommand("SELECT name_db FROM Credencial c, Rutas r WHERE (c.id_ruta = r.id) AND (c.id = @id)", con);
+                cmd.Parameters.AddWithValue("@id", item.id);
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                da.Fill(dt);
+                con.Close();
+
+                String name_db = dt.Rows[0]["name_db"].ToString();
+                @name_db
+
+             } 
         </td>
         <td>
             @Html.ActionLink("Editar", "Update", new { id=item.id }) |

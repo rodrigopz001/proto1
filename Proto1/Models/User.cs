@@ -16,9 +16,9 @@ namespace Proto1.Models
 
         public int is_active { get; set; } 
 
-        public String db_path { get; set; }
-
         public int user_type { get; set; }
+
+        public int id_ruta { get; set; }
 
 
     }
