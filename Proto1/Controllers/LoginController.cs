@@ -36,7 +36,7 @@ namespace Proto1.Controllers
 
                 con.Open();
 
-                cmd = new SqlCommand("select c.* from Credencial c, Rutas r where c.id_ruta = r.id AND (c.username = @username AND c.password = @password)", con);
+                cmd = new SqlCommand("select * from Credencial c, Rutas r where c.id_ruta = r.id AND (c.username = @username AND c.password = @password)", con);
                 cmd.Parameters.AddWithValue("@username", user.username);
                 cmd.Parameters.AddWithValue("@password", user.password);
 
@@ -60,6 +60,7 @@ namespace Proto1.Controllers
 
                     System.Web.HttpContext.Current.Session["user_name"] = name;
                     System.Web.HttpContext.Current.Session["id_ruta"] = id_ruta;
+                    System.Web.HttpContext.Current.Session["db_path"] = dt.Rows[0]["name_db"];
                     System.Web.HttpContext.Current.Session["user_type"] = user_type;
                     System.Web.HttpContext.Current.Session["is_logged"] = 1;
 

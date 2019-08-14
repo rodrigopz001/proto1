@@ -6,7 +6,7 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<h2>Usuarios</h2>
 
 <p>
     @Html.ActionLink("Nuevo", "Create")
@@ -42,7 +42,7 @@
         <td>
             @if (item.is_active == 0)
             {
-                @:Deshabilitado
+                @:Inhabilitado
             }
             else
             {

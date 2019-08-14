@@ -1,4 +1,6 @@
 ﻿@model Proto1.Models.User
+@using System.Data
+@using System.Data.SqlClient
 
 @{
     ViewBag.Title = "Delete";
@@ -12,7 +14,7 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.username)
+            Nombre
         </dt>
 
         <dd>
@@ -20,7 +22,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.password)
+            Contraseña
         </dt>
 
         <dd>
@@ -28,28 +30,51 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.is_active)
+            Estado
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.is_active)
+            @if (Model.is_active == 1)
+            {
+                @:Habilitado
+            }
+            else
+            {
+                @:Inhabilitado
+            }
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.db_path)
+            Base de datos
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.db_path)
+            @{
+
+                DataTable dt = new DataTable();
+                string strConString = @"Data Source=.\SQLEXPRESS;Initial Catalog=catalogo;Integrated Security=True";
+                SqlConnection con = new SqlConnection(strConString);
+                con.Open();
+                SqlCommand cmd = new SqlCommand("SELECT name_db FROM Credencial c, Rutas r WHERE (c.id_ruta = r.id) AND (c.id = @id)", con);
+                cmd.Parameters.AddWithValue("@id", Model.id);
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                da.Fill(dt);
+                con.Close();
+
+                String name_db = dt.Rows[0]["name_db"].ToString();
+                @name_db
+
+            }
         </dd>
 
     </dl>
 
-    @using (Html.BeginForm()) {
+    @using (Html.BeginForm())
+    {
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
+            <input type="submit" value="Eliminar" class="btn btn-default" /> |
             @Html.ActionLink("Regresar", "Index")
         </div>
     }

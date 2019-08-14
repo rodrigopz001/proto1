@@ -4,7 +4,7 @@
     ViewBag.Title = "Update";
 }
 
-<h2>Update</h2>
+<h2>Editar usuario</h2>
 
 
 @using (Html.BeginForm())
@@ -12,7 +12,7 @@
     @Html.AntiForgeryToken()
     
     <div class="form-horizontal">
-        <h4>User</h4>
+        <h4>Edite los datos en el formulario</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.id)
@@ -36,37 +36,36 @@
         <div class="form-group">
             @Html.LabelFor(model => model.is_active, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.is_active, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.is_active, "", new { @class = "text-danger" })
-            </div>
-        </div>
+                <div class="checkbox">
+                    @{
+                        List<SelectListItem> listItems = new List<SelectListItem>();
+                        listItems.Add(new SelectListItem
+                        {
+                            Text = "Inhabilitado",
+                            Value = "0",
+                        });
+                        listItems.Add(new SelectListItem
+                        {
+                            Text = "Habilitado",
+                            Value = "1",
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.db_path, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.db_path, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.db_path, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.user_type, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.user_type, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.user_type, "", new { @class = "text-danger" })
+                        });
+                    }
+                    @Html.DropDownListFor(model => model.is_active, listItems)
+                </div>
             </div>
         </div>
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
+                <input type="submit" value="Registrar" class="btn btn-default" />
             </div>
         </div>
     </div>
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Regresar", "Index")
 </div>
 
 @section Scripts {

@@ -223,7 +223,7 @@ namespace Proto1.Controllers
                         SqlCommand cmd = new SqlCommand(query, con);
                         cmd.ExecuteNonQuery();
 
-                        query = "CREATE TABLE Credencial(id INT identity(1,1) PRIMARY KEY, username varchar(50), password varchar(50), is_active INT, db_path varchar(50), user_type INT)";
+                        query = "CREATE TABLE Credencial(id INT identity(1,1) PRIMARY KEY, username varchar(50), password varchar(50), is_active INT, id_ruta int, user_type INT)";
                         cmd = new SqlCommand(query, con);
                         cmd.ExecuteNonQuery();
 
@@ -299,16 +299,40 @@ namespace Proto1.Controllers
 
                         con.Open();
 
-                        String query = "update Credencial set username = @username, password = @password, is_active = @is_active, db_path = @db_path, user_type = @user_type where id = @id";
-                        SqlCommand cmd = new SqlCommand(query, con);
+                        SqlCommand cmd;
+                        SqlDataAdapter da;
+                        DataTable dt;
+
+                        cmd = new SqlCommand("select username, id_ruta from Credencial where id = @id", con);
+                        cmd.Parameters.AddWithValue("@id", user.id);
+                        da = new SqlDataAdapter(cmd);
+                        dt = new DataTable();
+                        da.Fill(dt);
+
+                        String username = dt.Rows[0]["username"].ToString();
+                        int id_ruta = Int32.Parse(dt.Rows[0]["id_ruta"].ToString());
+
+                        String query = "update Credencial set username = @username, password = @password, is_active = @is_active where id = @id";
+                        cmd = new SqlCommand(query, con);
 
                         cmd.Parameters.AddWithValue("@id", user.id);
                         cmd.Parameters.AddWithValue("@username", user.username);
                         cmd.Parameters.AddWithValue("@password", user.password);
                         cmd.Parameters.AddWithValue("@is_active", user.is_active);
-                        cmd.Parameters.AddWithValue("@db_path", user.username+"_db");
-                        cmd.Parameters.AddWithValue("@user_type", 1);
                         cmd.ExecuteNonQuery();
+
+                        query = "update Rutas set name_db = @username where id = @id_ruta";
+                        cmd = new SqlCommand(query, con);
+                        cmd.Parameters.AddWithValue("@username", user.username + "_db");
+                        cmd.Parameters.AddWithValue("@id_ruta", id_ruta);
+                        cmd.ExecuteNonQuery();
+
+                        //Mejorar la seguridad.
+                        query = "sp_rename " +username+ "_db , " +user.username+ "_db , 'DATABASE'";
+                        cmd = new SqlCommand(query, con);
+                        cmd.ExecuteNonQuery();                      
+
+                        con.Close();
 
                     }
 
@@ -385,6 +409,13 @@ namespace Proto1.Controllers
 
                         cmd.Parameters.AddWithValue("@id", user.id);
                         cmd.ExecuteNonQuery();
+
+                        //query = "delete r1 from Rutas r1 WHERE r1.id = (SELECT r2.id FROM Credencial c, Rutas r2 WHERE(c.id_ruta = r2.id) AND(c.user_type > 0) AND(c.id = @id))";
+                        //cmd = new SqlCommand(query, con);
+                        //cmd.Parameters.AddWithValue("@id", user.id);
+                        //cmd.ExecuteNonQuery();
+
+                        con.Close();
 
                     }
 

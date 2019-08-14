@@ -102,7 +102,7 @@
     ViewBag.Title = "Login";
 }
 
-@using (Html.BeginForm("Index", "Login", FormMethod.Post, htmlAttributes: new { @class = "box" }))
+@using (Html.BeginForm("Index", "Login", FormMethod.Post, htmlAttributes: new { id="myForm", @class = "box" }))
 {
     <fieldset>
         <legend>Identificación de usuario</legend>
@@ -129,9 +129,38 @@
             <tr>
                 <td>
                     <br />
-                    <center><input type="submit" value="Ingresar" /></center>
+                    <center><input type="button" value="Ingresar" onclick="return validarLogin()" /></center>
                 </td>
             </tr>
         </table>
     </fieldset>
 } 
+
+<script>
+
+    function validarLogin() {
+
+        var username_text = document.getElementById("username").value;
+        var password_text = document.getElementById("password").value;
+
+        if ((username_text == "" || username_text == undefined) && (password_text == "" || username_text == undefined)) {
+
+            alert("Porfavor, ingrese su nombre de usuario y contraseña.");
+
+        } else if (username_text == "" || username_text == undefined ) {
+
+            alert("Porfavor, ingrese su nombre de usuario.");
+
+        } else if (password_text == "" || password_text == undefined) {
+
+            alert("Porfavor, ingrese su contraseña.");
+
+        } else {
+
+            document.getElementById("myForm").submit();
+            
+        }
+
+    }
+
+</script>

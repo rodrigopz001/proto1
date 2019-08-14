@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -50,7 +51,7 @@ namespace Proto1.Controllers
                         int id = Int32.Parse(row["id"].ToString());
                         String username = row["username"].ToString();
                         String password = row["password"].ToString();
-                        int is_active = Int32.Parse(row["id"].ToString());
+                        int is_active = Int32.Parse(row["is_active"].ToString());
                         int user_type = Int32.Parse(row["user_type"].ToString());
 
                         User user = new User();
@@ -156,6 +157,7 @@ namespace Proto1.Controllers
                 if (Int32.Parse(System.Web.HttpContext.Current.Session["user_type"].ToString()) == 1)
                 {
 
+                    int id_ruta = Int32.Parse(System.Web.HttpContext.Current.Session["id_ruta"].ToString());
                     String db_path = System.Web.HttpContext.Current.Session["db_path"].ToString();
                     string strConString = @"Data Source=.\SQLEXPRESS;Initial Catalog="+db_path+";Integrated Security=True";
 
@@ -164,13 +166,13 @@ namespace Proto1.Controllers
 
                         con.Open();
 
-                        String query = "insert into Credencial(username,password,is_active,id_ruta,user_type) values(@username, @password, @is_active, @id_ruta, @user_type)";
+                        String query = "insert into Credencial(username,password,is_active,user_type,id_ruta) values(@username, @password, @is_active, @user_type, @id_ruta)";
                         SqlCommand cmd = new SqlCommand(query, con);
 
                         cmd.Parameters.AddWithValue("@username", user.username);
                         cmd.Parameters.AddWithValue("@password", user.password);
                         cmd.Parameters.AddWithValue("@is_active", user.is_active);
-                        cmd.Parameters.AddWithValue("@id_ruta", user.id_ruta);
+                        cmd.Parameters.AddWithValue("@id_ruta", id_ruta);
                         cmd.Parameters.AddWithValue("@user_type", 2);
                         cmd.ExecuteNonQuery();
 
@@ -189,7 +191,7 @@ namespace Proto1.Controllers
                         cmd.Parameters.AddWithValue("@username", user.username);
                         cmd.Parameters.AddWithValue("@password", user.password);
                         cmd.Parameters.AddWithValue("@is_active", user.is_active);
-                        cmd.Parameters.AddWithValue("@id_ruta", 1);
+                        cmd.Parameters.AddWithValue("@id_ruta", id_ruta);
                         cmd.Parameters.AddWithValue("@user_type", 2);
                         cmd.ExecuteNonQuery();
 
@@ -257,6 +259,7 @@ namespace Proto1.Controllers
                 {
 
                     String db_path = System.Web.HttpContext.Current.Session["db_path"].ToString();
+                    int id_ruta = Int32.Parse(System.Web.HttpContext.Current.Session["id_ruta"].ToString());
                     string strConString = @"Data Source=.\SQLEXPRESS;Initial Catalog="+db_path+";Integrated Security=True";
 
                     using (SqlConnection con = new SqlConnection(strConString))
@@ -264,15 +267,13 @@ namespace Proto1.Controllers
 
                         con.Open();
 
-                        String query = "update Credencial set username = @username, password = @password, is_active = @is_active, id_ruta = @id_ruta, user_type = @user_type where id = @id";
+                        String query = "update Credencial set username = @username, password = @password, is_active = @is_active where id = @id";
                         SqlCommand cmd = new SqlCommand(query, con);
 
                         cmd.Parameters.AddWithValue("@id", user.id);
                         cmd.Parameters.AddWithValue("@username", user.username);
                         cmd.Parameters.AddWithValue("@password", user.password);
                         cmd.Parameters.AddWithValue("@is_active", user.is_active);
-                        cmd.Parameters.AddWithValue("@id_ruta", user.id_ruta);
-                        cmd.Parameters.AddWithValue("@user_type", user.user_type);
                         cmd.ExecuteNonQuery();
 
                     }
@@ -284,15 +285,13 @@ namespace Proto1.Controllers
 
                         con2.Open();
 
-                        String query = "update Credencial set username = @username, password = @password, is_active = @is_active, db_path = @db_path, user_type = @user_type where id = @id";
+                        String query = "update Credencial set username = @username, password = @password, is_active = @is_active where id = @id";
                         SqlCommand cmd = new SqlCommand(query, con2);
 
                         cmd.Parameters.AddWithValue("@id", user.id);
                         cmd.Parameters.AddWithValue("@username", user.username);
                         cmd.Parameters.AddWithValue("@password", user.password);
                         cmd.Parameters.AddWithValue("@is_active", user.is_active);
-                        cmd.Parameters.AddWithValue("@id_ruta", user.id_ruta);
-                        cmd.Parameters.AddWithValue("@user_type", user.user_type);
                         cmd.ExecuteNonQuery();
 
                     }
@@ -407,16 +406,16 @@ namespace Proto1.Controllers
         {
 
             String db_path = System.Web.HttpContext.Current.Session["db_path"].ToString();
+            int id_ruta = Int32.Parse(System.Web.HttpContext.Current.Session["id_ruta"].ToString());
 
             DataTable dt = new DataTable();
             string strConString = @"Data Source=.\SQLEXPRESS;Initial Catalog="+db_path+";Integrated Security=True";
-
 
             using (SqlConnection con = new SqlConnection(strConString))
             {
 
                 con.Open();
-                SqlCommand cmd = new SqlCommand("select * from Credencial where convert(varchar,id)=" + id, con);
+                SqlCommand cmd = new SqlCommand("select * from Credencial where id = " + id, con);
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 da.Fill(dt);
 
@@ -433,7 +432,7 @@ namespace Proto1.Controllers
             user.username = username;
             user.password = password;
             user.is_active = is_active;
-            user.id_ruta = Int32.Parse(db_path);
+            user.id_ruta = id_ruta;
             user.user_type = user_type;
 
             return user;
