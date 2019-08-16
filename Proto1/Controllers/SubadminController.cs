@@ -159,14 +159,16 @@ namespace Proto1.Controllers
 
                     int id_ruta = Int32.Parse(System.Web.HttpContext.Current.Session["id_ruta"].ToString());
                     String db_path = System.Web.HttpContext.Current.Session["db_path"].ToString();
-                    string strConString = @"Data Source=.\SQLEXPRESS;Initial Catalog="+db_path+";Integrated Security=True";
+                    int last_id;
+
+                    String strConString = @"Data Source=.\SQLEXPRESS;Initial Catalog=catalogo;Integrated Security=True";
 
                     using (SqlConnection con = new SqlConnection(strConString))
                     {
 
                         con.Open();
 
-                        String query = "insert into Credencial(username,password,is_active,user_type,id_ruta) values(@username, @password, @is_active, @user_type, @id_ruta)";
+                        String query = "insert into Credencial(username,password,is_active,id_ruta,user_type) values(@username, @password, @is_active, @id_ruta, @user_type)";
                         SqlCommand cmd = new SqlCommand(query, con);
 
                         cmd.Parameters.AddWithValue("@username", user.username);
@@ -176,18 +178,26 @@ namespace Proto1.Controllers
                         cmd.Parameters.AddWithValue("@user_type", 2);
                         cmd.ExecuteNonQuery();
 
+                        query = "select max(id) from Credencial";
+                        cmd = new SqlCommand(query, con);
+                        SqlDataAdapter da = new SqlDataAdapter(cmd);
+                        DataTable dt = new DataTable();
+                        da.Fill(dt);
+                        last_id = Int32.Parse(dt.Rows[0][0].ToString());
+
                     }
+           
+                    strConString = @"Data Source=.\SQLEXPRESS;Initial Catalog="+db_path+";Integrated Security=True";
 
-                    strConString = @"Data Source=.\SQLEXPRESS;Initial Catalog=catalogo;Integrated Security=True";
-
-                    using (SqlConnection con2 = new SqlConnection(strConString))
+                    using (SqlConnection con = new SqlConnection(strConString))
                     {
 
-                        con2.Open();
+                        con.Open();
 
-                        String query = "insert into Credencial(username,password,is_active,id_ruta,user_type) values(@username, @password, @is_active, @id_ruta, @user_type)";
-                        SqlCommand cmd = new SqlCommand(query, con2);
+                        String query = "insert into Credencial(id, username,password,is_active,user_type,id_ruta) values(@id, @username, @password, @is_active, @user_type, @id_ruta)";
+                        SqlCommand cmd = new SqlCommand(query, con);
 
+                        cmd.Parameters.AddWithValue("@id", last_id);
                         cmd.Parameters.AddWithValue("@username", user.username);
                         cmd.Parameters.AddWithValue("@password", user.password);
                         cmd.Parameters.AddWithValue("@is_active", user.is_active);
@@ -258,8 +268,9 @@ namespace Proto1.Controllers
                 if (Int32.Parse(System.Web.HttpContext.Current.Session["user_type"].ToString()) == 1)
                 {
 
-                    String db_path = System.Web.HttpContext.Current.Session["db_path"].ToString();
                     int id_ruta = Int32.Parse(System.Web.HttpContext.Current.Session["id_ruta"].ToString());
+                    String db_path = System.Web.HttpContext.Current.Session["db_path"].ToString();
+                    
                     string strConString = @"Data Source=.\SQLEXPRESS;Initial Catalog="+db_path+";Integrated Security=True";
 
                     using (SqlConnection con = new SqlConnection(strConString))
@@ -358,6 +369,7 @@ namespace Proto1.Controllers
                 {
 
                     String db_path = System.Web.HttpContext.Current.Session["db_path"].ToString();
+
                     string strConString = @"Data Source=.\SQLEXPRESS;Initial Catalog="+db_path+";Integrated Security=True";
 
                     using (SqlConnection con = new SqlConnection(strConString))

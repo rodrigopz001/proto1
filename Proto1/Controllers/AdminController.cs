@@ -223,7 +223,7 @@ namespace Proto1.Controllers
                         SqlCommand cmd = new SqlCommand(query, con);
                         cmd.ExecuteNonQuery();
 
-                        query = "CREATE TABLE Credencial(id INT identity(1,1) PRIMARY KEY, username varchar(50), password varchar(50), is_active INT, id_ruta int, user_type INT)";
+                        query = "CREATE TABLE Credencial(id INT PRIMARY KEY, username varchar(50), password varchar(50), is_active INT, id_ruta int, user_type INT)";
                         cmd = new SqlCommand(query, con);
                         cmd.ExecuteNonQuery();
 
@@ -404,16 +404,27 @@ namespace Proto1.Controllers
 
                         con.Open();
 
-                        String query = "delete from Credencial where id = @id";
-                        SqlCommand cmd = new SqlCommand(query, con);
 
+
+                        int id_ruta;
+
+                        String query = "select id_ruta FROM Credencial where id = @id";
+                        SqlCommand cmd = new SqlCommand(query, con);
+                        cmd.Parameters.AddWithValue("@id", user.id);
+                        SqlDataAdapter da = new SqlDataAdapter(cmd);
+                        DataTable dt = new DataTable();
+                        da.Fill(dt);
+                        id_ruta = Int32.Parse(dt.Rows[0][0].ToString());
+
+                        query = "delete from Credencial where id = @id";
+                        cmd = new SqlCommand(query, con);
                         cmd.Parameters.AddWithValue("@id", user.id);
                         cmd.ExecuteNonQuery();
 
-                        //query = "delete r1 from Rutas r1 WHERE r1.id = (SELECT r2.id FROM Credencial c, Rutas r2 WHERE(c.id_ruta = r2.id) AND(c.user_type > 0) AND(c.id = @id))";
-                        //cmd = new SqlCommand(query, con);
-                        //cmd.Parameters.AddWithValue("@id", user.id);
-                        //cmd.ExecuteNonQuery();
+                        query = "delete from Rutas where id = @id_ruta";
+                        cmd = new SqlCommand(query, con);
+                        cmd.Parameters.AddWithValue("@id_ruta", id_ruta);
+                        cmd.ExecuteNonQuery();
 
                         con.Close();
 
@@ -443,9 +454,12 @@ namespace Proto1.Controllers
             {
 
                 con.Open();
+
                 SqlCommand cmd = new SqlCommand("select * from Credencial where convert(varchar,id)=" + id, con);
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 da.Fill(dt);
+
+                con.Close();
 
             }
 
@@ -478,10 +492,12 @@ namespace Proto1.Controllers
             {
 
                 con.Open();
+
                 SqlCommand cmd = new SqlCommand("select * from Credencial where username = @name", con);
                 cmd.Parameters.AddWithValue("@name", name);
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 da.Fill(dt);
+
                 con.Close();
 
             }
@@ -514,9 +530,12 @@ namespace Proto1.Controllers
             {
 
                 con.Open();
+
                 SqlCommand cmd = new SqlCommand("select * from Credencial order by db_path, con");
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 da.Fill(dt);
+
+                con.Close();
 
             }
 
