@@ -12,7 +12,13 @@ namespace Proto1.Models
 
         public String nombre { get; set; }
 
-        public String ruta_bd { get; set; }
+        public String rut { get; set; }
+
+        public String direccion { get; set; }
+
+        public int is_active { get; set; }
+
+        public int ruta_bd { get; set; }
 
     }
 }

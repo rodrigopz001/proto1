@@ -36,7 +36,7 @@ namespace Proto1.Controllers
 
                 con.Open();
 
-                cmd = new SqlCommand("select * from Credencial c, Rutas r where c.id_ruta = r.id AND (c.username = @username AND c.password = @password)", con);
+                cmd = new SqlCommand("select * from Credenciales c, Empresas e, Rutas r where (c.id_empresa = e.id) AND (e.id_ruta = r.id) AND (c.username = @username AND c.password = @password AND c.is_active = 1 and e.is_active = 1 and r.is_active = 1)", con);
                 cmd.Parameters.AddWithValue("@username", user.username);
                 cmd.Parameters.AddWithValue("@password", user.password);
 
@@ -53,14 +53,14 @@ namespace Proto1.Controllers
                 else
                 {
 
-                    int user_type = Int32.Parse(dt.Rows[0]["user_type"].ToString());
-
                     String name = user.username;
-                    String id_ruta = dt.Rows[0]["id_ruta"].ToString();
+                    int user_type = Int32.Parse(dt.Rows[0][4].ToString());
+                    int id_empresa = Int32.Parse(dt.Rows[0][5].ToString());
+                    String nombre_empresa = dt.Rows[0][7].ToString();
 
                     System.Web.HttpContext.Current.Session["user_name"] = name;
-                    System.Web.HttpContext.Current.Session["id_ruta"] = id_ruta;
-                    System.Web.HttpContext.Current.Session["db_path"] = dt.Rows[0]["name_db"];
+                    System.Web.HttpContext.Current.Session["id_empresa"] = id_empresa;
+                    System.Web.HttpContext.Current.Session["nombre_empresa"] = nombre_empresa;
                     System.Web.HttpContext.Current.Session["user_type"] = user_type;
                     System.Web.HttpContext.Current.Session["is_logged"] = 1;
 
@@ -68,7 +68,7 @@ namespace Proto1.Controllers
                     {
 
                         con.Close();
-                        return RedirectToAction("Index", "Admin");
+                        return RedirectToAction("Index", "Empresa");
 
                     }
 
@@ -101,7 +101,8 @@ namespace Proto1.Controllers
 
             Debug.WriteLine("Cerrando sesión");
             System.Web.HttpContext.Current.Session["user_name"] = null;
-            System.Web.HttpContext.Current.Session["id_ruta"] = null;
+            System.Web.HttpContext.Current.Session["id_empresa"] = null;
+            System.Web.HttpContext.Current.Session["nombre_empresa"] = null;
             System.Web.HttpContext.Current.Session["user_type"] = null;
             System.Web.HttpContext.Current.Session["is_logged"] = null;
             return RedirectToAction("Index", "Login");
