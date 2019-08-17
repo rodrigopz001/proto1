@@ -29,7 +29,7 @@ namespace Proto1.Controllers
                 {
 
                     DataTable dt = new DataTable();
-                    string strConString = @"Data Source=.\SQLEXPRESS;Initial Catalog=catalogo;Integrated Security=True";
+                    string strConString = @"Data Source=localhost;Initial Catalog=catalogo;Integrated Security=True";
 
                     using (SqlConnection con = new SqlConnection(strConString))
                     {
@@ -158,7 +158,7 @@ namespace Proto1.Controllers
                 {
 
 
-                    string strConString = @"Data Source=.\SQLEXPRESS;Initial Catalog=catalogo;Integrated Security=True";
+                    string strConString = @"Data Source=localhost;Initial Catalog=catalogo;Integrated Security=True";
 
                     using (SqlConnection con = new SqlConnection(strConString))
                     {
@@ -197,7 +197,7 @@ namespace Proto1.Controllers
 
                     }
 
-                    strConString = @"Data Source=.\SQLEXPRESS;Initial Catalog=master;Integrated Security=True";
+                    strConString = @"Data Source=localhost;Initial Catalog=master;Integrated Security=True";
 
                     using (SqlConnection con = new SqlConnection(strConString))
                     {
@@ -212,7 +212,7 @@ namespace Proto1.Controllers
 
                     }
 
-                    strConString = @"Data Source=.\SQLEXPRESS;Initial Catalog=" + user.username + "_db" + ";Integrated Security=True";
+                    strConString = @"Data Source=localhost;Initial Catalog=" + user.username + "_db" + ";Integrated Security=True";
 
                     using (SqlConnection con = new SqlConnection(strConString))
                     {
@@ -292,7 +292,7 @@ namespace Proto1.Controllers
                 if (Int32.Parse(System.Web.HttpContext.Current.Session["user_type"].ToString()) == 0)
                 {
 
-                    string strConString = @"Data Source=.\SQLEXPRESS;Initial Catalog=catalogo;Integrated Security=True";
+                    string strConString = @"Data Source=localhost;Initial Catalog=catalogo;Integrated Security=True";
 
                     using (SqlConnection con = new SqlConnection(strConString))
                     {
@@ -397,7 +397,7 @@ namespace Proto1.Controllers
                 if (Int32.Parse(System.Web.HttpContext.Current.Session["user_type"].ToString()) == 0)
                 {
 
-                    string strConString = @"Data Source=.\SQLEXPRESS;Initial Catalog=catalogo;Integrated Security=True";
+                    string strConString = @"Data Source=localhost;Initial Catalog=catalogo;Integrated Security=True";
 
                     using (SqlConnection con = new SqlConnection(strConString))
                     {
@@ -448,7 +448,7 @@ namespace Proto1.Controllers
         {
 
             DataTable dt = new DataTable();
-            string strConString = @"Data Source=.\SQLEXPRESS;Initial Catalog=catalogo;Integrated Security=True";
+            string strConString = @"Data Source=localhost;Initial Catalog=catalogo;Integrated Security=True";
 
             using (SqlConnection con = new SqlConnection(strConString))
             {
@@ -486,7 +486,7 @@ namespace Proto1.Controllers
         {
             
             DataTable dt = new DataTable();
-            string strConString = @"Data Source=.\SQLEXPRESS;Initial Catalog=catalogo;Integrated Security=True";
+            string strConString = @"Data Source=localhost;Initial Catalog=catalogo;Integrated Security=True";
 
             using (SqlConnection con = new SqlConnection(strConString))
             {
@@ -522,7 +522,7 @@ namespace Proto1.Controllers
         {
 
             DataTable dt = new DataTable();
-            string strConString = @"Data Source=.\SQLEXPRESS;Initial Catalog=catalogo;Integrated Security=True";
+            string strConString = @"Data Source=localhost;Initial Catalog=catalogo;Integrated Security=True";
 
             List<SelectListItem> listItems = new List<SelectListItem>();
 

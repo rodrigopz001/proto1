@@ -28,16 +28,17 @@ namespace Proto1.Controllers
                 if (Int32.Parse(System.Web.HttpContext.Current.Session["user_type"].ToString()) == 1)
                 {
 
-                    String db_path = System.Web.HttpContext.Current.Session["db_path"].ToString();
+                    String db_path = System.Web.HttpContext.Current.Session["nombre_bd"].ToString();
 
                     DataTable dt = new DataTable();
-                    string strConString = @"Data Source=.\SQLEXPRESS;Initial Catalog=" + db_path + ";Integrated Security=True";
+                    string strConString = @"Data Source=localhost;Initial Catalog=" + db_path + ";Integrated Security=True";
 
                     using (SqlConnection con = new SqlConnection(strConString))
                     {
 
+
                         con.Open();
-                        SqlCommand cmd = new SqlCommand("Select * from Credencial", con);
+                        SqlCommand cmd = new SqlCommand("Select * from Credenciales where user_type = 2", con);
                         SqlDataAdapter da = new SqlDataAdapter(cmd);
                         da.Fill(dt);
 
@@ -51,6 +52,8 @@ namespace Proto1.Controllers
                         int id = Int32.Parse(row["id"].ToString());
                         String username = row["username"].ToString();
                         String password = row["password"].ToString();
+                        String rut = row["rut"].ToString();
+                        String email = row["email"].ToString();
                         int is_active = Int32.Parse(row["is_active"].ToString());
                         int user_type = Int32.Parse(row["user_type"].ToString());
 
@@ -58,8 +61,9 @@ namespace Proto1.Controllers
                         user.id = id;
                         user.username = username;
                         user.password = password;
+                        user.rut = rut;
+                        user.email = email;
                         user.is_active = is_active;
-                        user.id_ruta = 1;
                         user.user_type = user_type;
 
                         userList.Add(user);
@@ -157,28 +161,28 @@ namespace Proto1.Controllers
                 if (Int32.Parse(System.Web.HttpContext.Current.Session["user_type"].ToString()) == 1)
                 {
 
-                    int id_ruta = Int32.Parse(System.Web.HttpContext.Current.Session["id_ruta"].ToString());
-                    String db_path = System.Web.HttpContext.Current.Session["db_path"].ToString();
+                    int id_empresa = Int32.Parse(System.Web.HttpContext.Current.Session["id_empresa"].ToString());
+                    String db_path = System.Web.HttpContext.Current.Session["nombre_bd"].ToString();
                     int last_id;
 
-                    String strConString = @"Data Source=.\SQLEXPRESS;Initial Catalog=catalogo;Integrated Security=True";
+                    String strConString = @"Data Source=localhost;Initial Catalog=catalogo;Integrated Security=True";
 
                     using (SqlConnection con = new SqlConnection(strConString))
                     {
 
                         con.Open();
 
-                        String query = "insert into Credencial(username,password,is_active,id_ruta,user_type) values(@username, @password, @is_active, @id_ruta, @user_type)";
+                        String query = "insert into Credenciales(username,password,is_active,user_type,id_empresa) values(@username, @password, @is_active, @user_type, @id_empresa)";
                         SqlCommand cmd = new SqlCommand(query, con);
 
                         cmd.Parameters.AddWithValue("@username", user.username);
                         cmd.Parameters.AddWithValue("@password", user.password);
-                        cmd.Parameters.AddWithValue("@is_active", user.is_active);
-                        cmd.Parameters.AddWithValue("@id_ruta", id_ruta);
+                        cmd.Parameters.AddWithValue("@is_active", 1);
+                        cmd.Parameters.AddWithValue("@id_empresa", id_empresa);
                         cmd.Parameters.AddWithValue("@user_type", 2);
                         cmd.ExecuteNonQuery();
 
-                        query = "select max(id) from Credencial";
+                        query = "select max(id) from Credenciales";
                         cmd = new SqlCommand(query, con);
                         SqlDataAdapter da = new SqlDataAdapter(cmd);
                         DataTable dt = new DataTable();
@@ -187,21 +191,22 @@ namespace Proto1.Controllers
 
                     }
            
-                    strConString = @"Data Source=.\SQLEXPRESS;Initial Catalog="+db_path+";Integrated Security=True";
+                    strConString = @"Data Source=localhost;Initial Catalog="+db_path+";Integrated Security=True";
 
                     using (SqlConnection con = new SqlConnection(strConString))
                     {
 
                         con.Open();
 
-                        String query = "insert into Credencial(id, username,password,is_active,user_type,id_ruta) values(@id, @username, @password, @is_active, @user_type, @id_ruta)";
+                        String query = "insert into Credenciales(id, username, password, rut, email, is_active, user_type) values(@id, @username, @password, @rut, @email, @is_active, @user_type)";
                         SqlCommand cmd = new SqlCommand(query, con);
 
                         cmd.Parameters.AddWithValue("@id", last_id);
                         cmd.Parameters.AddWithValue("@username", user.username);
                         cmd.Parameters.AddWithValue("@password", user.password);
-                        cmd.Parameters.AddWithValue("@is_active", user.is_active);
-                        cmd.Parameters.AddWithValue("@id_ruta", id_ruta);
+                        cmd.Parameters.AddWithValue("@rut", user.rut);
+                        cmd.Parameters.AddWithValue("@email", user.email);
+                        cmd.Parameters.AddWithValue("@is_active", 1);
                         cmd.Parameters.AddWithValue("@user_type", 2);
                         cmd.ExecuteNonQuery();
 
@@ -268,41 +273,40 @@ namespace Proto1.Controllers
                 if (Int32.Parse(System.Web.HttpContext.Current.Session["user_type"].ToString()) == 1)
                 {
 
-                    int id_ruta = Int32.Parse(System.Web.HttpContext.Current.Session["id_ruta"].ToString());
-                    String db_path = System.Web.HttpContext.Current.Session["db_path"].ToString();
+                    String db_path = System.Web.HttpContext.Current.Session["nombre_bd"].ToString();
                     
-                    string strConString = @"Data Source=.\SQLEXPRESS;Initial Catalog="+db_path+";Integrated Security=True";
+                    string strConString = @"Data Source=localhost;Initial Catalog="+db_path+";Integrated Security=True";
 
                     using (SqlConnection con = new SqlConnection(strConString))
                     {
 
                         con.Open();
 
-                        String query = "update Credencial set username = @username, password = @password, is_active = @is_active where id = @id";
+                        String query = "update Credenciales set username = @username, password = @password, rut = @rut, email = @email where id = @id";
                         SqlCommand cmd = new SqlCommand(query, con);
 
                         cmd.Parameters.AddWithValue("@id", user.id);
                         cmd.Parameters.AddWithValue("@username", user.username);
                         cmd.Parameters.AddWithValue("@password", user.password);
-                        cmd.Parameters.AddWithValue("@is_active", user.is_active);
+                        cmd.Parameters.AddWithValue("@rut", user.rut);
+                        cmd.Parameters.AddWithValue("@email", user.email);
                         cmd.ExecuteNonQuery();
 
                     }
 
-                    strConString = @"Data Source=.\SQLEXPRESS;Initial Catalog=catalogo;Integrated Security=True";
+                    strConString = @"Data Source=localhost;Initial Catalog=catalogo;Integrated Security=True";
 
                     using (SqlConnection con2 = new SqlConnection(strConString))
                     {
 
                         con2.Open();
 
-                        String query = "update Credencial set username = @username, password = @password, is_active = @is_active where id = @id";
+                        String query = "update Credenciales set username = @username, password = @password where id = @id";
                         SqlCommand cmd = new SqlCommand(query, con2);
 
                         cmd.Parameters.AddWithValue("@id", user.id);
                         cmd.Parameters.AddWithValue("@username", user.username);
                         cmd.Parameters.AddWithValue("@password", user.password);
-                        cmd.Parameters.AddWithValue("@is_active", user.is_active);
                         cmd.ExecuteNonQuery();
 
                     }
@@ -368,34 +372,34 @@ namespace Proto1.Controllers
                 if (Int32.Parse(System.Web.HttpContext.Current.Session["user_type"].ToString()) == 1)
                 {
 
-                    String db_path = System.Web.HttpContext.Current.Session["db_path"].ToString();
+                    String db_path = System.Web.HttpContext.Current.Session["nombre_bd"].ToString();
 
-                    string strConString = @"Data Source=.\SQLEXPRESS;Initial Catalog="+db_path+";Integrated Security=True";
+                    string strConString = @"Data Source=localhost;Initial Catalog="+db_path+";Integrated Security=True";
 
                     using (SqlConnection con = new SqlConnection(strConString))
                     {
 
                         con.Open();
 
-                        String query = "delete from Credencial where id = @id";
+                        String query = "update Credenciales set is_active = @is_active where id = @id";
                         SqlCommand cmd = new SqlCommand(query, con);
-
                         cmd.Parameters.AddWithValue("@id", user.id);
+                        cmd.Parameters.AddWithValue("@is_active", 0);
                         cmd.ExecuteNonQuery();
 
                     }
 
-                    strConString = @"Data Source=.\SQLEXPRESS;Initial Catalog=catalogo;Integrated Security=True";
+                    strConString = @"Data Source=localhost;Initial Catalog=catalogo;Integrated Security=True";
 
                     using (SqlConnection con2 = new SqlConnection(strConString))
                     {
 
                         con2.Open();
 
-                        String query = "delete from Credencial where id = @id";
+                        String query = "update Credenciales set is_active = @is_active where id = @id";
                         SqlCommand cmd = new SqlCommand(query, con2);
-
                         cmd.Parameters.AddWithValue("@id", user.id);
+                        cmd.Parameters.AddWithValue("@is_active", 0);
                         cmd.ExecuteNonQuery();
 
                     }
@@ -417,17 +421,16 @@ namespace Proto1.Controllers
         private User GetUser(String id)
         {
 
-            String db_path = System.Web.HttpContext.Current.Session["db_path"].ToString();
-            int id_ruta = Int32.Parse(System.Web.HttpContext.Current.Session["id_ruta"].ToString());
+            String db_path = System.Web.HttpContext.Current.Session["nombre_bd"].ToString();
 
             DataTable dt = new DataTable();
-            string strConString = @"Data Source=.\SQLEXPRESS;Initial Catalog="+db_path+";Integrated Security=True";
+            string strConString = @"Data Source=localhost;Initial Catalog="+db_path+";Integrated Security=True";
 
             using (SqlConnection con = new SqlConnection(strConString))
             {
 
                 con.Open();
-                SqlCommand cmd = new SqlCommand("select * from Credencial where id = " + id, con);
+                SqlCommand cmd = new SqlCommand("select * from Credenciales where id = " + id, con);
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 da.Fill(dt);
 
@@ -435,6 +438,8 @@ namespace Proto1.Controllers
 
             String username = dt.Rows[0]["username"].ToString();
             String password = dt.Rows[0]["password"].ToString();
+            String rut = dt.Rows[0]["rut"].ToString();
+            String email = dt.Rows[0]["email"].ToString();
             int is_active = Int32.Parse(dt.Rows[0]["is_active"].ToString());
             int user_type = Int32.Parse(dt.Rows[0]["user_type"].ToString());
 
@@ -443,8 +448,9 @@ namespace Proto1.Controllers
             user.id = Int32.Parse(id);
             user.username = username;
             user.password = password;
+            user.rut = rut;
+            user.email = email;
             user.is_active = is_active;
-            user.id_ruta = id_ruta;
             user.user_type = user_type;
 
             return user;

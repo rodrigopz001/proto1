@@ -11,53 +11,48 @@
 {
     @Html.AntiForgeryToken()
     
-    <div class="form-horizontal">
-        <h4>Complete el siguiente formulario</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
-            @Html.LabelFor(model => model.username, "Nombre", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.username, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.username, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.password, "Contraseña", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.password, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.password, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.is_active, "Estado", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @{
-                    List<SelectListItem> listItems = new List<SelectListItem>();
-                    listItems.Add(new SelectListItem
-                    {
-                        Text = "Inhabilitado",
-                        Value = "0",
-                    });
-                    listItems.Add(new SelectListItem
-                    {
-                        Text = "Habilitado",
-                        Value = "1",
-                        Selected = true
-                    });
-                }
-                @Html.DropDownListFor(model => model.is_active, listItems)
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Crear" class="btn btn-default" />
-            </div>
+<div class="form-horizontal">
+    <h4>Complete el siguiente formulario</h4>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(model => model.username, "Nombre", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.username, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.username, "", new { @class = "text-danger" })
         </div>
     </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.password, "Contraseña", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.password, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.password, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.rut, "Rut", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.rut, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.rut, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.password, "Email", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.email, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.email, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Crear" class="btn btn-default" />
+        </div>
+    </div>
+</div>
 }
 
 <div>

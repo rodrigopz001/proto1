@@ -14,6 +14,10 @@ namespace Proto1.Models
 
         public String password { get; set; }
 
+        public String rut { get; set; }
+
+        public String email { get; set; }
+
         public int is_active { get; set; } 
 
         public int user_type { get; set; }

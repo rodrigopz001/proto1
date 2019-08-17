@@ -27,22 +27,21 @@
         </dd>
 
         <dt>
-            Estado
+            Rut
         </dt>
 
         <dd>
-            @{ 
-                if (Model.is_active == 0)
-                {
-                    @:Inhabilitado
-                }
-
-                if(Model.is_active == 1)
-                {
-                    @:Habilitado
-                }
-            }
+            @Html.DisplayFor(model => model.rut)
         </dd>
+
+        <dt>
+            Email
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.email)
+        </dd>
+
     </dl>
 </div>
 <p>

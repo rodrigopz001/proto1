@@ -65,7 +65,7 @@
             @{
 
                 DataTable dt = new DataTable();
-                string strConString = @"Data Source=.\SQLEXPRESS;Initial Catalog=catalogo;Integrated Security=True";
+                string strConString = @"Data Source=localhost;Initial Catalog=catalogo;Integrated Security=True";
                 SqlConnection con = new SqlConnection(strConString);
                 con.Open();
                 SqlCommand cmd = new SqlCommand("SELECT name_db FROM Credencial c, Rutas r WHERE (c.id_ruta = r.id) AND (c.id = @id)", con);

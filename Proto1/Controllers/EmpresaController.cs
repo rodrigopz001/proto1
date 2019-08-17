@@ -29,7 +29,7 @@ namespace Proto1.Controllers
                 {
 
                     DataTable dt = new DataTable();
-                    string strConString = @"Data Source=.\SQLEXPRESS;Initial Catalog=catalogo;Integrated Security=True";
+                    string strConString = @"Data Source=localhost;Initial Catalog=catalogo;Integrated Security=True";
 
                     using (SqlConnection con = new SqlConnection(strConString))
                     {
@@ -120,7 +120,7 @@ namespace Proto1.Controllers
 
 
                     int id_empresa;
-                    string strConString = @"Data Source=.\SQLEXPRESS;Initial Catalog=catalogo;Integrated Security=True";
+                    string strConString = @"Data Source=localhost;Initial Catalog=catalogo;Integrated Security=True";
 
                     using (SqlConnection con = new SqlConnection(strConString))
                     {
@@ -146,7 +146,7 @@ namespace Proto1.Controllers
 
                         query = "insert into Rutas(name_db,is_active) values(@name_db, @is_active)";
                         cmd = new SqlCommand(query, con);
-                        cmd.Parameters.AddWithValue("@name_db", empresa.nombre + "_db");
+                        cmd.Parameters.AddWithValue("@name_db", empresa.nombre.Replace(" ","_").ToLower() + "_db");
                         cmd.Parameters.AddWithValue("@is_active", 1);
                         cmd.ExecuteNonQuery();
 
@@ -169,7 +169,7 @@ namespace Proto1.Controllers
                     }
 
                     String nombre_db;
-                    strConString = @"Data Source=.\SQLEXPRESS;Initial Catalog=master;Integrated Security=True";
+                    strConString = @"Data Source=localhost;Initial Catalog=master;Integrated Security=True";
 
                     using (SqlConnection con = new SqlConnection(strConString))
                     {
@@ -186,7 +186,7 @@ namespace Proto1.Controllers
 
                     }
 
-                    strConString = @"Data Source=.\SQLEXPRESS;Initial Catalog=" + nombre_db+ ";Integrated Security=True";
+                    strConString = @"Data Source=localhost;Initial Catalog=" + nombre_db+ ";Integrated Security=True";
 
                     using (SqlConnection con = new SqlConnection(strConString))
                     {
@@ -197,7 +197,7 @@ namespace Proto1.Controllers
                         SqlCommand cmd = new SqlCommand(query, con);
                         cmd.ExecuteNonQuery();
 
-                        query = "CREATE TABLE Credenciales(id INT PRIMARY KEY, username varchar(50), password varchar(50), is_active INT, user_type INT)";
+                        query = "CREATE TABLE Credenciales(id INT PRIMARY KEY, username varchar(50), password varchar(50), rut varchar(50), email varchar(50), is_active INT, user_type INT)";
                         cmd = new SqlCommand(query, con);
                         cmd.ExecuteNonQuery();
 
@@ -206,7 +206,7 @@ namespace Proto1.Controllers
                     }
 
                     int last_id2;
-                    strConString = @"Data Source=.\SQLEXPRESS;Initial Catalog=catalogo;Integrated Security=True";
+                    strConString = @"Data Source=localhost;Initial Catalog=catalogo;Integrated Security=True";
 
                     using (SqlConnection con = new SqlConnection(strConString))
                     {
@@ -234,18 +234,20 @@ namespace Proto1.Controllers
 
                     }
 
-                    strConString = @"Data Source=.\SQLEXPRESS;Initial Catalog="+nombre_db+";Integrated Security=True";
+                    strConString = @"Data Source=localhost;Initial Catalog="+nombre_db+";Integrated Security=True";
 
                     using (SqlConnection con = new SqlConnection(strConString))
                     {
 
                         con.Open();
 
-                        String query = "insert into Credenciales(id, username, password, is_active, user_type) values(@id, @username, @password, @is_active, @user_type)";
+                        String query = "insert into Credenciales(id, username, password, rut, email, is_active, user_type) values(@id, @username, @password, @rut, @email, @is_active, @user_type)";
                         SqlCommand cmd = new SqlCommand(query, con);
                         cmd.Parameters.AddWithValue("id", last_id2);
                         cmd.Parameters.AddWithValue("@username", empresa.nombre.Replace(" ", "_").ToLower());
                         cmd.Parameters.AddWithValue("@password", empresa.nombre.Replace(" ", "_").ToLower() + "_123");
+                        cmd.Parameters.AddWithValue("@rut", "12345678-9");
+                        cmd.Parameters.AddWithValue("@email", "email@email.com");
                         cmd.Parameters.AddWithValue("@is_active", 1);
                         cmd.Parameters.AddWithValue("@user_type", 1);
                         cmd.ExecuteNonQuery();
@@ -315,7 +317,7 @@ namespace Proto1.Controllers
                 if (Int32.Parse(System.Web.HttpContext.Current.Session["user_type"].ToString()) == 0)
                 {
 
-                    string strConString = @"Data Source=.\SQLEXPRESS;Initial Catalog=catalogo;Integrated Security=True";
+                    string strConString = @"Data Source=localhost;Initial Catalog=catalogo;Integrated Security=True";
 
                     using (SqlConnection con = new SqlConnection(strConString))
                     {
@@ -398,7 +400,7 @@ namespace Proto1.Controllers
                 if (Int32.Parse(System.Web.HttpContext.Current.Session["user_type"].ToString()) == 0)
                 {
 
-                    string strConString = @"Data Source=.\SQLEXPRESS;Initial Catalog=catalogo;Integrated Security=True";
+                    string strConString = @"Data Source=localhost;Initial Catalog=catalogo;Integrated Security=True";
 
                     using (SqlConnection con = new SqlConnection(strConString))
                     {
@@ -463,19 +465,11 @@ namespace Proto1.Controllers
 
         }
 
-        [HttpPost]
-        public ActionResult Details(Empresa e)
-        {
-
-            return null;
-
-        }
-
         private Empresa GetEmpresa(String id)
         {
 
             DataTable dt = new DataTable();
-            string strConString = @"Data Source=.\SQLEXPRESS;Initial Catalog=catalogo;Integrated Security=True";
+            string strConString = @"Data Source=localhost;Initial Catalog=catalogo;Integrated Security=True";
 
             using (SqlConnection con = new SqlConnection(strConString))
             {

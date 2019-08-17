@@ -29,7 +29,7 @@ namespace Proto1.Controllers
             SqlCommand cmd;
             SqlDataAdapter da;
 
-            string strConString = @"Data Source=.\SQLEXPRESS;Initial Catalog=catalogo;Integrated Security=True";
+            string strConString = @"Data Source=localhost;Initial Catalog=catalogo;Integrated Security=True";
       
             using (SqlConnection con = new SqlConnection(strConString))
             {
@@ -57,10 +57,12 @@ namespace Proto1.Controllers
                     int user_type = Int32.Parse(dt.Rows[0][4].ToString());
                     int id_empresa = Int32.Parse(dt.Rows[0][5].ToString());
                     String nombre_empresa = dt.Rows[0][7].ToString();
+                    String nombre_bd = dt.Rows[0]["name_db"].ToString();
 
                     System.Web.HttpContext.Current.Session["user_name"] = name;
                     System.Web.HttpContext.Current.Session["id_empresa"] = id_empresa;
                     System.Web.HttpContext.Current.Session["nombre_empresa"] = nombre_empresa;
+                    System.Web.HttpContext.Current.Session["nombre_bd"] = nombre_bd;
                     System.Web.HttpContext.Current.Session["user_type"] = user_type;
                     System.Web.HttpContext.Current.Session["is_logged"] = 1;
 

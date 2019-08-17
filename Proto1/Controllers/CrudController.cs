@@ -31,16 +31,16 @@ namespace Proto1.Controllers
                 if (user_type == 1 || user_type == 2)
                 {
 
-                    String db_path = System.Web.HttpContext.Current.Session["db_path"].ToString();
+                    String db_path = System.Web.HttpContext.Current.Session["nombre_bd"].ToString();
 
                     DataTable dt = new DataTable();
-                    string strConString = @"Data Source=.\SQLEXPRESS;Initial Catalog=" + db_path + ";Integrated Security=True";
+                    string strConString = @"Data Source=localhost;Initial Catalog=" + db_path + ";Integrated Security=True";
 
                     using (SqlConnection con = new SqlConnection(strConString))
                     {
 
                         con.Open();
-                        SqlCommand cmd = new SqlCommand("Select * from Entity", con);
+                        SqlCommand cmd = new SqlCommand("Select * from Entidades", con);
                         SqlDataAdapter da = new SqlDataAdapter(cmd);
                         da.Fill(dt);
 
@@ -131,16 +131,16 @@ namespace Proto1.Controllers
                 {
 
                     String user_name = System.Web.HttpContext.Current.Session["user_name"].ToString();
-                    String db_path = System.Web.HttpContext.Current.Session["db_path"].ToString();
+                    String db_path = System.Web.HttpContext.Current.Session["nombre_bd"].ToString();
 
-                    string strConString = @"Data Source=.\SQLEXPRESS;Initial Catalog=" + db_path + ";Integrated Security=True";
+                    string strConString = @"Data Source=localhost;Initial Catalog=" + db_path + ";Integrated Security=True";
 
                     using (SqlConnection con = new SqlConnection(strConString))
                     {
 
                         con.Open();
 
-                        String query = "insert into Entity(name,content,creation_date) values(@name, @content, @creation_date)";
+                        String query = "insert into Entidades(name,content,creation_date) values(@name, @content, @creation_date)";
                         SqlCommand cmd = new SqlCommand(query, con);
 
                         cmd.Parameters.AddWithValue("@name", entity.name);
@@ -216,18 +216,18 @@ namespace Proto1.Controllers
                 {
 
                     String user_name = System.Web.HttpContext.Current.Session["user_name"].ToString();
-                    String db_path = System.Web.HttpContext.Current.Session["db_path"].ToString();
+                    String db_path = System.Web.HttpContext.Current.Session["nombre_bd"].ToString();
 
                     Debug.WriteLine("Update (POST)");
 
-                    string strConString = @"Data Source=.\SQLEXPRESS;Initial Catalog=" + db_path + ";Integrated Security=True";
+                    string strConString = @"Data Source=localhost;Initial Catalog=" + db_path + ";Integrated Security=True";
 
                     using (SqlConnection con = new SqlConnection(strConString))
                     {
 
                         con.Open();
 
-                        String query = "update Entity set name = @name, content = @content, creation_date = @creation_date where id = @id";
+                        String query = "update Entidades set name = @name, content = @content, creation_date = @creation_date where id = @id";
                         SqlCommand cmd = new SqlCommand(query, con);
 
                         cmd.Parameters.AddWithValue("@id", entity.id);
@@ -304,16 +304,16 @@ namespace Proto1.Controllers
                 {
 
                     String user_name = System.Web.HttpContext.Current.Session["user_name"].ToString();
-                    String db_path = System.Web.HttpContext.Current.Session["db_path"].ToString();
+                    String db_path = System.Web.HttpContext.Current.Session["nombre_bd"].ToString();
 
-                    string strConString = @"Data Source=.\SQLEXPRESS;Initial Catalog=" + db_path + ";Integrated Security=True";
+                    string strConString = @"Data Source=localhost;Initial Catalog=" + db_path + ";Integrated Security=True";
 
                     using (SqlConnection con = new SqlConnection(strConString))
                     {
 
                         con.Open();
 
-                        String query = "delete from Entity where id = @id";
+                        String query = "delete from Entidades where id = @id";
                         SqlCommand cmd = new SqlCommand(query, con);
 
                         cmd.Parameters.AddWithValue("@id", entity.id);
@@ -372,16 +372,16 @@ namespace Proto1.Controllers
         {
 
             String user_name = System.Web.HttpContext.Current.Session["user_name"].ToString();
-            String db_path = System.Web.HttpContext.Current.Session["db_path"].ToString();
+            String db_path = System.Web.HttpContext.Current.Session["nombre_db"].ToString();
 
             DataTable dt = new DataTable();
-            string strConString = @"Data Source=.\SQLEXPRESS;Initial Catalog=" +db_path+";Integrated Security=True";
+            string strConString = @"Data Source=localhost;Initial Catalog=" +db_path+";Integrated Security=True";
 
             using (SqlConnection con = new SqlConnection(strConString))
             {
 
                 con.Open();
-                SqlCommand cmd = new SqlCommand("select * from Entity where convert(varchar,id)=" + id, con);
+                SqlCommand cmd = new SqlCommand("select * from Entidades where convert(varchar,id)=" + id, con);
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 da.Fill(dt);
 
